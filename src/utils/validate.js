@@ -15,6 +15,6 @@ export function isExternal(path) {
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
+  const valid_map = Object.keys(String(Array(2000))).concat('admin')
   return valid_map.indexOf(str.trim()) >= 0
 }

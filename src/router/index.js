@@ -49,9 +49,9 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: '我的主页',
+      name: '我的图书',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '我的主页', icon: 'dashboard' }
+      meta: { title: '我的图书', icon: 'dashboard' }
     }]
   },
 
@@ -71,25 +71,12 @@ export const constantRoutes = [
   },
 
   {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: '添加评分',
-        component: () => import('@/views/form/index'),
-        meta: { title: '添加评分', icon: 'form' }
-      }
-    ]
-  },
-
-  {
     path: 'external-link',
     component: Layout,
     children: [
       {
-        path: 'https://www.github.com/imguozr/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'https://github.com/imguozr/Vue-Recommender',
+        meta: { title: '项目地址', icon: 'link' }
       }
     ]
   },

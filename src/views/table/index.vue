@@ -3,40 +3,54 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      height="750"
       element-loading-text="Loading"
       border
       fit
       highlight-current-row
+      :default-sort="{prop: 'score', order: 'descending'}"
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column prop="pic" align="center" label="图片" width="200">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          <img :src="scope.row.image_url">
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column prop="title" label="标题" align="center" sortable>
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column prop="authors" label="作者" width="200" align="center" sortable>
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          <span>{{ scope.row.authors }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
+      <el-table-column prop="isbn" label="ISBN" width="200" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+          <div v-if="scope.row.isbn13">{{ scope.row.isbn13 }}</div>
+          <div v-else-if="scope.row.isbn">{{ scope.row.isbn }}</div>
+          <div v-else>暂无资料</div>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
+      <el-table-column
+        prop="score"
+        align="center"
+        label="平均得分"
+        width="200"
+        sortable
+        :sort-method="sortFloat"
+      >
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+          {{ scope.row.average_rating }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
+      <el-table-column align="center" label="操作" width="150">
         <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
+          <el-button
+            size="mini"
+            type="danger"
+            @click.native.prevent="deleteRow(scope.row, list)"
+          >不感兴趣</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,7 +58,8 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+// import { getList } from '@/api/table'
+import { getUserBooks } from '@/api/book'
 
 export default {
   filters: {
@@ -63,16 +78,24 @@ export default {
       listLoading: true
     }
   },
-  created() {
-    this.fetchData()
+  mounted() {
+    const id = this.$store.getters.id
+    this.listLoading = true
+    getUserBooks(id).then(
+      response => {
+        console.log(response.data)
+        this.list = response.data
+        this.listLoading = false
+      }
+    )
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
+    sortFloat(a, b) {
+      return parseFloat(a.average_rating) - parseFloat(b.average_rating)
+    },
+    deleteRow(item, list) {
+      const index = list.indexOf(item)
+      list.splice(index, 1)
     }
   }
 }

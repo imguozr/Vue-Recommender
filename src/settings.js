@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Recommendation - System',
+  title: 'Recommender System',
 
   /**
    * @type {boolean} true | false
