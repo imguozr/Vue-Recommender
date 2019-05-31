@@ -18,3 +18,10 @@ export function getUserBooks(user_id) {
     method: 'get'
   })
 }
+
+export function getRecommendBooks(user_id, num) {
+  return service.request({
+    url: `/user/${user_id}/ratings/top/${num}`,
+    method: 'get'
+  })
+}

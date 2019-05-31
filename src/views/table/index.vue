@@ -59,7 +59,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getUserBooks } from '@/api/book'
+import { getRecommendBooks } from '@/api/book'
 
 export default {
   filters: {
@@ -81,7 +81,7 @@ export default {
   mounted() {
     const id = this.$store.getters.id
     this.listLoading = true
-    getUserBooks(id).then(
+    getRecommendBooks(id, 15).then(
       response => {
         console.log(response.data)
         this.list = response.data
